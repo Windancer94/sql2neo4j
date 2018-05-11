@@ -1,5 +1,9 @@
 # sql2neo4j
-从关系型数据导入数据到neo4j
+从关系型数据导入数据到neo4j  
+依赖包:  
+``pip install pymysql``
+``pip install neo4j-driver``
+``pip install configparser``
 ## 连接
 工具内部使用apoc来实现导入功能
 ### neo4j连接配置
