@@ -19,7 +19,7 @@ mysql表规范:
 在自己的代码中引用模块:  
 ``from import_helper import loader``  
 方法:说明  
- ``etltime()``:生成etl时间
+ ``etltime()``:生成etl时间  
  ``merge_node()``:同步节点,如果有pid相同的节点,将更新节点  
  ``merge_relationship()``:同步关系,如果pid相同的节点中,存在相同的关系类型,将更新关系  
  ``create_node()``:导入节点  
@@ -27,12 +27,12 @@ mysql表规范:
  ``batch_create_node()``:分批导入节点,对于数据量千万级以上的节点,建议分批导入  
  ``batch_create_relationship()``:分批导入关系  
 ### 节点导入参数
- source:mysql连接,query:sql语句,label:标签,etltime:etl时间  
+ ``source:mysql连接,query:sql语句,label:标签,etltime:etl时间``  
  例如:  
  ``create_node(local,"select * from test.person","person","2018-01-01 00:00:00")``  
  ``create_node(local,"select * from test.book","book","2018-01-01 00:00:00")``  
 ### 关系导入参数
- source:mysql连接,query:sql语句,label:关系的起点标签,label_end:关系的终点标签,relationtype:关系类型  
+ ``source:mysql连接,query:sql语句,label:关系的起点标签,label_end:关系的终点标签,relationtype:关系类型``  
  例如:  
  ``create_relationship(local,"select * from test.person_like_book","person","book","2018-01-01 00:00:00")``
 ## 参考
