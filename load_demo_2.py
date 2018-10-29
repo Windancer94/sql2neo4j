@@ -31,26 +31,26 @@ def data_import(source):
     l.create_relationship(source,r_term_entity,l_term,l_entity,l_watching)
     l.create_relationship(source,r_entity_entity,l_entity,l_entity,l_watching)
 
-def auto_import(source):
+def auto_import(source,node_tables,relationship_tables):
     '''
     自动导入
 
     '''
-    node_tables = ['''test.merge_content''','''test.merge_term''','''test.merge_entity''']
-    relation_tables = ['''test.merge_content_watching_term''','''test.merge_term_watching_entity''','''test.merge_entity_watching_entity''']
     w = worker()
     print('导入开始',datetime.now())
     for node_table in node_tables:
         w.do_node(node_table,source)
         print('节点导入完成',datetime.now())
-    for relation_table in relation_tables:
-        w.do_relationship(relation_table,source)
+    for relationship_table in relationship_tables:
+        w.do_relationship(relationship_table,source)
         print('关系导入完成',datetime.now())
 
 #main方法执行
 def main():
     source='jdbc:mysql://127.0.0.1:3306/?user=...&password=...'
-    auto_import(source)
+    node_tables = ['''test.merge_content''','''test.merge_term''','''test.merge_entity''']
+    relationship_tables = ['''test.merge_content_watching_term''','''test.merge_term_watching_entity''','''test.merge_entity_watching_entity''']
+    auto_import(source,node_tables,relationship_tables)
 
 if __name__=='''__main__''':
     main()
