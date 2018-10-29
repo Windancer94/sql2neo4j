@@ -10,7 +10,7 @@ class worker(object):
     def __init__(value):
         value=value
 
-    def do_node(self,table,source="local",loadtype):
+    def do_node(self,table,source="local",loadtype='auto'):
         info=[]
         info=re.split("_",re.sub(".*\.","",table))
         if loadtype=='auto':
@@ -31,7 +31,7 @@ class worker(object):
         else:
             return '''loadtype不存在'''
 
-    def do_relationship(self,table,source="local",loadtype):
+    def do_relationship(self,table,source="local",loadtype='auto'):
         info=[]
         info=re.split("_",re.sub(".*\.","",table))
         if loadtype=='auto':
@@ -63,10 +63,8 @@ class worker(object):
         print('任务开始:',datetime.now())
         for node_table in node_tables:
             w.do_node(node_table,source,loadtype)
-            print('节点导入完成',datetime.now())
         for relationship_table in relationship_tables:
             w.do_relationship(relationship_table,source,loadtype)
-            print('关系导入完成',datetime.now())
         print('任务结束:',datetime.now())
 
 
