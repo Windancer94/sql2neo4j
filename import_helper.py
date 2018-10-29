@@ -117,8 +117,8 @@ class jigsaw(object):
         batch='''{batchsize:10000,parallel:true,iteratelist:true}'''
         cypher=f'''
         CALL apoc.periodic.iterate(
-        'call apoc.load.jdbc("{source}","{query}") YIELD row'
-        ,'create(n:outside:{label}) set n=row, n.etltime="{etltime}"'
+        ' call apoc.load.jdbc("{source}","{query}") YIELD row '
+        ,' merge(n:outside:{label}) set n=row, n.etltime="{etltime}" '
         ,{batch}
         )
         '''
@@ -129,18 +129,17 @@ class jigsaw(object):
     def batch_relationship(self,source,query,label,label_end,relationtype):  # 抽取关系数据(source:数据来源类型,query:查询语句,label:节点标签,label_end:尾部节点标签,relationtype:关系类型)
         check='''{pid:row.pid}'''
         check_e='''{pid:row.pid_e}'''
-        relationtype=relationtype+''' '''+'''{row}'''
-        batch='''{batchsize:2000,parallel:false,iteratelist:false}'''
+        relationtype=relationtype
+        batch='''{batchsize:10000,parallel:false,iteratelist:false}'''
         cypher=f'''
         CALL apoc.periodic.iterate(
-        'call apoc.load.jdbc("{source}","{query}") YIELD row '
-        ,'merge (n:outside:{label} {check}) with *
+        ' call apoc.load.jdbc("{source}","{query}") YIELD row '
+        ,' merge (n:outside:{label} {check}) with *
         merge (n_e:outside:{label_end} {check_e}) with *
-        create (n)-[r:{relationtype}]->(n_e)'
+        merge (n)-[r:{relationtype}]->(n_e) set r.freq = coalesce(r.freq,0)+1,r+=row '
         ,{batch}
         )
         '''
-        print(cypher)
         c=carrier()
         tx=c.run_cypher(cypher)
         return cypher
