@@ -117,8 +117,8 @@ class jigsaw(object):
         batch='''{batchsize:10000,parallel:true,iteratelist:true}'''
         cypher=f'''
         CALL apoc.periodic.iterate(
-        ' call apoc.load.jdbc("{source}","{query}") YIELD row '
-        ,' merge(n:outside:{label}) set n=row, n.etltime="{etltime}" '
+        'call apoc.load.jdbc("{source}","{query}") YIELD row '
+        ,'create(n:outside:{label}) set n=row, n.etltime="{etltime}" '
         ,{batch}
         )
         '''
@@ -133,7 +133,7 @@ class jigsaw(object):
         batch='''{batchsize:10000,parallel:false,iteratelist:false}'''
         cypher=f'''
         CALL apoc.periodic.iterate(
-        ' call apoc.load.jdbc("{source}","{query}") YIELD row '
+        'call apoc.load.jdbc("{source}","{query}") YIELD row '
         ,' merge (n:outside:{label} {check}) with *
         merge (n_e:outside:{label_end} {check_e}) with *
         merge (n)-[r:{relationtype}]->(n_e) set r.freq = coalesce(r.freq,0)+1,r+=row '
