@@ -11,8 +11,11 @@ class worker(object):
         value=value
 
     def do_node(self,table,source="local"):
-        loadtype=re.sub("_.*|.*\.","",table)
-        label=re.sub(".*_","",table)
+        info=[]
+        info=re.split("_",re.sub(".*\.","",table))
+        print(info)
+        loadtype=info[0]
+        label=info[1]
         node=f'''select * from {table}'''
         l=loader()
         etltime=l.etltime()
